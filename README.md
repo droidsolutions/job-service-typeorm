@@ -2,8 +2,9 @@
 
 TypeORM implementation of [DroidSolutions job service](https://github.com/droidsolutions/job-service).
 
-![npm (scoped)](https://img.shields.io/npm/v/@droidsolutions-oss/job-service-typeorm)
+[![main](https://github.com/droidsolutions/job-service-typeorm/actions/workflows/main.yml/badge.svg)](https://github.com/droidsolutions/job-service-typeorm/actions/workflows/main.yml)
 [![Coverage Status](https://coveralls.io/repos/github/droidsolutions/job-service-typeorm/badge.svg?branch=main)](https://coveralls.io/github/droidsolutions/job-service-typeorm?branch=main)
+![npm (scoped)](https://img.shields.io/npm/v/@droidsolutions-oss/job-service-typeorm)
 
 This is an implementation of the `IJobRepository` interface from the NodeJS version of the [DroidSolutions job service](https://github.com/droidsolutions/job-service). It can be used to handle (recurring) jobs in a scaled NodeJS application.
 
