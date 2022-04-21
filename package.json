@@ -1,6 +1,6 @@
 {
   "name": "@droidsolutions-oss/job-service-typeorm",
-  "version": "1.0.0-develop.1",
+  "version": "1.0.0-develop.2",
   "description": "TypeORM implementation of DroidSolutions job service",
   "main": "dist/index.js",
   "scripts": {
