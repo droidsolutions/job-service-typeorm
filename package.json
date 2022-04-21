@@ -30,7 +30,7 @@
   ],
   "types": "dist/src/Index.d.ts",
   "publishConfig": {
-    "acces": "public"
+    "access": "public"
   },
   "engines": {
     "node": ">=14.0.0"
