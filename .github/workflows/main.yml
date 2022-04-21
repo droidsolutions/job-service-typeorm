@@ -12,6 +12,13 @@ jobs:
           node-version: "16"
       - run: npm ci
       - run: npx tsc
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: dist
+          path: |
+            dist
+            !dist/test
   coverage:
     runs-on: ubuntu-latest
     services:
@@ -31,6 +38,7 @@ jobs:
           - 5432:5432
     steps:
       - uses: actions/checkout@v3
+      - run: npm ci
       - run: npx jest --coverage
         env:
           POSTGRES_HOST: postgres
