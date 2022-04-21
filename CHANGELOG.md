@@ -1,3 +1,10 @@
+# [1.0.0-develop.2](https://github.com/droidsolutions/job-service-typeorm/compare/v1.0.0-develop.1...v1.0.0-develop.2) (2022-04-21)
+
+
+### Bug Fixes
+
+* **release:** fix initial release ([faedafa](https://github.com/droidsolutions/job-service-typeorm/commit/faedafa7064d9b4eba91014c59982e8436ee5a2a))
+
 # 1.0.0-develop.1 (2022-04-21)
 
 
