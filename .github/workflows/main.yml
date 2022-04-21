@@ -41,7 +41,7 @@ jobs:
       - run: npm ci
       - run: npx jest --coverage
         env:
-          POSTGRES_HOST: postgres
+          POSTGRES_HOST: localhost
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: ""
       - name: publish coverage report to coveralls.io
