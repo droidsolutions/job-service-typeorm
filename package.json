@@ -4,6 +4,7 @@
   "description": "TypeORM implementation of DroidSolutions job service",
   "main": "dist/index.js",
   "scripts": {
+    "lint": "eslint --ext ts,js .",
     "test": "jest"
   },
   "repository": {
@@ -56,6 +57,7 @@
     "cancellationtoken": "2.2.0",
     "eslint": "8.13.0",
     "eslint-config-prettier": "8.5.0",
+    "eslint-plugin-jest": "26.1.4",
     "eslint-plugin-jsdoc": "39.2.7",
     "eslint-plugin-node": "11.1.0",
     "eslint-plugin-prettier": "4.0.0",
