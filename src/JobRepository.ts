@@ -44,10 +44,11 @@ export class JobRepository<TParams, TResult>
   private loggerFactory: LoggerFactory;
 
   /**
+   * Initializes a new instance of the @see JobRepository class.
    *
-   * @param manager The entity manager to use for the underlying repository.
-   * @param queryRunner The query runner for the underlying repository.
-   * @param loggerFactory The logger factory to create a logger for the repo.
+   * @param {EntityManager} manager The entity manager to use for the underlying repository.
+   * @param {QueryRunner} queryRunner The query runner for the underlying repository.
+   * @param {LoggerFactory} loggerFactory The logger factory to create a logger for the repo.
    */
   constructor(manager: EntityManager, queryRunner?: QueryRunner, loggerFactory?: LoggerFactory) {
     super(Job, manager, queryRunner);
@@ -63,7 +64,7 @@ export class JobRepository<TParams, TResult>
 
   /**
    * Initializes the logger for this repository instance.
-   * 
+   *
    * @param {Record<string, unknown>} meta Additional data to attach to the logger instance.
    */
   public initLogger(meta?: Record<string, unknown>): void {
