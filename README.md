@@ -1,4 +1,4 @@
-# job-service-typeorm
+# DroidSolutions Job Service TypeORM
 
 TypeORM implementation of [DroidSolutions job service](https://github.com/droidsolutions/job-service).
 
