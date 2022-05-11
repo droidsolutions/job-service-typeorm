@@ -1,4 +1,4 @@
-# job-service-typeorm
+# DroidSolutions Job Service TypeORM
 
 TypeORM implementation of [DroidSolutions job service](https://github.com/droidsolutions/job-service).
 
@@ -10,7 +10,7 @@ This is an implementation of the `IJobRepository` interface from the NodeJS vers
 
 # Installation
 
-This library is an extension to the [DroidSolutions job service](https://github.com/droidsolutions/job-service) library and needs it installed as well as the [Cancellation Token library](https://github.com/conradreuter/cancellationtoken). Since it is a repository implementation for [TypeORM](https://typeorm.io) the latter is also needed.
+This library is an extension to the [DroidSolutions Job Service](https://github.com/droidsolutions/job-service) library and needs it installed as well as the [Cancellation Token library](https://github.com/conradreuter/cancellationtoken). Since it is a repository implementation for [TypeORM](https://typeorm.io) the latter is also needed.
 
 To use it install this library along with the dependencies by using
 

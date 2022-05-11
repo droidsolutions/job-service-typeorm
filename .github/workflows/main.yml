@@ -63,7 +63,13 @@ jobs:
         uses: actions/setup-node@v3
       - name: Install packages
         run: npm ci
+      - name: Download lib from build job
+        uses: actions/download-artifact@v3
+        with:
+          name: dist
+          path: dist
       - name: Semantic Release
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-        run: npx semantic-release --dry-run
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npx semantic-release
