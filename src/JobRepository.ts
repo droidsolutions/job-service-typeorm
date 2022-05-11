@@ -76,7 +76,7 @@ export class JobRepository<TParams, TResult>
 
     this.logger = this.loggerFactory(this.constructor, meta);
 
-    this.logger.debug("initiated new repo logger");
+    this.logger.trace("initiated new repo logger");
   }
 
   public async addJobAsync(
