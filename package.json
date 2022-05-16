@@ -58,7 +58,7 @@
     "cancellationtoken": "2.2.0",
     "eslint": "8.15.0",
     "eslint-config-prettier": "8.5.0",
-    "eslint-plugin-jest": "26.1.5",
+    "eslint-plugin-jest": "26.2.2",
     "eslint-plugin-jsdoc": "39.2.9",
     "eslint-plugin-node": "11.1.0",
     "eslint-plugin-prettier": "4.0.0",
