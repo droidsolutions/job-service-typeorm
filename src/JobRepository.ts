@@ -10,7 +10,7 @@ import {
 } from "@droidsolutions-oss/job-service";
 import CancellationToken from "cancellationtoken";
 import { add } from "date-fns";
-import { DataSource, EntityManager, FindOptionsWhere, QueryRunner, Raw, Repository } from "typeorm";
+import { Brackets, DataSource, EntityManager, FindOptionsWhere, QueryRunner, Raw, Repository } from "typeorm";
 import { Job } from "./Entities/Job";
 
 export const getJobRepo = <TParams, TResult>(
@@ -110,16 +110,26 @@ export class JobRepository<TParams, TResult>
     type: string,
     dueDate?: Date,
     parameters?: TParams,
+    includeStarted = false,
     cancellationToken?: CancellationToken,
   ): Promise<IJob<TParams, TResult> | undefined> {
     if (!dueDate && !parameters) {
       throw new Error("Either dueDate or parameters must be given to find a job.");
     }
 
-    let query = this.manager
-      .createQueryBuilder<Job<TParams, TResult>>(Job, "j")
-      .where("j.type = :type", { type })
-      .andWhere("j.state = :state", { state: JobState.Requested });
+    let query = this.manager.createQueryBuilder<Job<TParams, TResult>>(Job, "j").where("j.type = :type", { type });
+
+    if (includeStarted) {
+      query = query.andWhere(
+        new Brackets((qb) =>
+          qb
+            .where("j.state = :state", { state: JobState.Requested })
+            .orWhere("j.state = :state", { state: JobState.Started }),
+        ),
+      );
+    } else {
+      query = query.andWhere("j.state = :state", { state: JobState.Requested });
+    }
     if (dueDate) {
       query = query.andWhere("j.dueDate <= :dueDate", { dueDate });
     }

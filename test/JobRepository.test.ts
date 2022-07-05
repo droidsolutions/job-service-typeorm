@@ -167,6 +167,28 @@ describe("JobRepository", () => {
         expect(actual).toBeUndefined();
       });
     });
+
+    describe("with includeStarted", () => {
+      let existingJob: Job<TestParameter, TestResult>;
+      const type = "started-job";
+      const dueDate = new Date(2022, 7, 5, 15, 42, 27);
+
+      beforeAll(async () => {
+        existingJob = await repo.addJobAsync(type, dueDate);
+        existingJob.state = JobState.Started;
+        await repo.save(existingJob);
+      });
+
+      it("should not find job when includeStarted is false", async () => {
+        const actual = await repo.findExistingJobAsync(type, dueDate, undefined, false);
+        expect(actual).toBeUndefined();
+      });
+
+      it("should find job when includeStarted is true", async () => {
+        const actual = await repo.findExistingJobAsync(type, dueDate, undefined, true);
+        expect(actual).not.toBeUndefined();
+      });
+    });
   });
 
   describe("getAndStartFirstPendingJob", () => {
