@@ -10,7 +10,7 @@ import {
 } from "@droidsolutions-oss/job-service";
 import CancellationToken from "cancellationtoken";
 import { add } from "date-fns";
-import { DataSource, EntityManager, FindOptionsWhere, QueryRunner, Raw, Repository } from "typeorm";
+import { DataSource, EntityManager, FindManyOptions, FindOptionsWhere, QueryRunner, Raw, Repository } from "typeorm";
 import { Job } from "./Entities/Job";
 
 export const getJobRepo = <TParams, TResult>(
@@ -104,6 +104,24 @@ export class JobRepository<TParams, TResult>
     this.logger?.info(`Added job ${job.id} with type ${job.type} due ${job.dueDate.toISOString()}.`);
 
     return job;
+  }
+
+  public async countJobsAsync(
+    type: string,
+    state?: JobState | undefined,
+    cancellationToken?: CancellationToken | undefined,
+  ): Promise<number> {
+    const where: FindOptionsWhere<Job<TParams, TResult>> = {};
+    if (type) {
+      where.type = type;
+    }
+
+    if (state) {
+      where.state = state;
+    }
+
+    cancellationToken?.throwIfCancelled();
+    return await this.count({ where });
   }
 
   public async findExistingJobAsync(
