@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/droidsolutions/job-service-typeorm/compare/v1.0.0...v1.1.0) (2022-11-03)
+
+
+### Features
+
+* **jobRepository:** add countJobsAsync method ([2f0951b](https://github.com/droidsolutions/job-service-typeorm/commit/2f0951b25a8713c1d23a91c769abd15376d776af))
+
 # 1.0.0 (2022-05-11)
 
 
