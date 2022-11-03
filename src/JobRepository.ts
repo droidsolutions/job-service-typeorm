@@ -106,6 +106,24 @@ export class JobRepository<TParams, TResult>
     return job;
   }
 
+  public async countJobsAsync(
+    type: string,
+    state?: JobState | undefined,
+    cancellationToken?: CancellationToken | undefined,
+  ): Promise<number> {
+    const where: FindOptionsWhere<Job<TParams, TResult>> = {};
+    if (type) {
+      where.type = type;
+    }
+
+    if (state) {
+      where.state = state;
+    }
+
+    cancellationToken?.throwIfCancelled();
+    return await this.count({ where });
+  }
+
   public async findExistingJobAsync(
     type: string,
     dueDate?: Date,

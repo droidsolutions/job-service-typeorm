@@ -453,4 +453,24 @@ describe("JobRepository", () => {
 
     it("should have reset failedItems to requested in db", () => expect(loadedJob?.failedItems).toBeNull());
   });
+
+  describe("countJobs", () => {
+    it("should count all jobs", async () => {
+      await repo.addJobAsync("count-all");
+      await repo.addJobAsync("count-all");
+      await repo.addJobAsync("count-all");
+
+      const count = await repo.countJobsAsync("count-all");
+      expect(count).toBe(3);
+    });
+
+    it("should count all jobs with state", async () => {
+      await repo.addJobAsync("count-all");
+      await repo.addJobAsync("count-all");
+      await repo.getAndStartFirstPendingJobAsync("count-all", "its-a-me-mario");
+
+      const count = await repo.countJobsAsync("count-all", JobState.Started);
+      expect(count).toBe(1);
+    });
+  });
 });
