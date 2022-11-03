@@ -1,3 +1,15 @@
+# [2.0.0-develop.2](https://github.com/droidsolutions/job-service-typeorm/compare/v2.0.0-develop.1...v2.0.0-develop.2) (2022-11-03)
+
+
+### Bug Fixes
+
+* update job-service to include merged feature ([f576ca9](https://github.com/droidsolutions/job-service-typeorm/commit/f576ca97b82d01485e9a3731fde5716fd04c0803))
+
+
+### Features
+
+* **jobRepository:** add countJobsAsync method ([2f0951b](https://github.com/droidsolutions/job-service-typeorm/commit/2f0951b25a8713c1d23a91c769abd15376d776af))
+
 # [2.0.0-develop.1](https://github.com/droidsolutions/job-service-typeorm/compare/v1.0.0...v2.0.0-develop.1) (2022-07-05)
 
 
