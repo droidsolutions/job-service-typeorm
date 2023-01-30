@@ -141,8 +141,8 @@ export class JobRepository<TParams, TResult>
       query = query.andWhere(
         new Brackets((qb) =>
           qb
-            .where("j.state = :state", { state: JobState.Requested })
-            .orWhere("j.state = :state", { state: JobState.Started }),
+            .where("j.state = :requested", { requested: JobState.Requested })
+            .orWhere("j.state = :started", { started: JobState.Started }),
         ),
       );
     } else {
