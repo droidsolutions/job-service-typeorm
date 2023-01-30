@@ -1,3 +1,10 @@
+# [2.0.0-develop.3](https://github.com/droidsolutions/job-service-typeorm/compare/v2.0.0-develop.2...v2.0.0-develop.3) (2023-01-30)
+
+
+### Bug Fixes
+
+* **JobRepository:** find Requested jobs ([2a151ad](https://github.com/droidsolutions/job-service-typeorm/commit/2a151ade851100dfac6965e4eb42c8bd1b7b59b5))
+
 # [2.0.0-develop.2](https://github.com/droidsolutions/job-service-typeorm/compare/v2.0.0-develop.1...v2.0.0-develop.2) (2022-11-03)
 
 
