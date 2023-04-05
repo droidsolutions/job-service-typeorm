@@ -1,3 +1,21 @@
+# [2.0.0](https://github.com/droidsolutions/job-service-typeorm/compare/v1.1.0...v2.0.0) (2023-04-05)
+
+
+### Bug Fixes
+
+* **JobRepository:** find Requested jobs ([2a151ad](https://github.com/droidsolutions/job-service-typeorm/commit/2a151ade851100dfac6965e4eb42c8bd1b7b59b5))
+* update job-service to include merged feature ([f576ca9](https://github.com/droidsolutions/job-service-typeorm/commit/f576ca97b82d01485e9a3731fde5716fd04c0803))
+
+
+### Features
+
+* allow find started jobs ([9bf253f](https://github.com/droidsolutions/job-service-typeorm/commit/9bf253f6f1d305a96dba8bcd1b793e723313f14e))
+
+
+### BREAKING CHANGES
+
+* JobRepository.findExistingJobAsync has an additional includeStarted argument
+
 # [2.0.0-develop.3](https://github.com/droidsolutions/job-service-typeorm/compare/v2.0.0-develop.2...v2.0.0-develop.3) (2023-01-30)
 
 
