@@ -52,7 +52,7 @@
     "@semantic-release/github": "8.0.7",
     "@semantic-release/npm": "10.0.3",
     "@types/jest": "29.5.1",
-    "@types/node": "20.2.0",
+    "@types/node": "20.2.1",
     "@typescript-eslint/eslint-plugin": "5.59.6",
     "@typescript-eslint/parser": "5.59.6",
     "cancellationtoken": "2.2.0",
