@@ -45,7 +45,6 @@ export class JobRepository<TParams, TResult>
 
   /**
    * Initializes a new instance of the @see JobRepository class.
-   *
    * @param {EntityManager} manager The entity manager to use for the underlying repository.
    * @param {QueryRunner} queryRunner The query runner for the underlying repository.
    * @param {LoggerFactory} loggerFactory The logger factory to create a logger for the repo.
@@ -64,7 +63,6 @@ export class JobRepository<TParams, TResult>
 
   /**
    * Initializes the logger for this repository instance.
-   *
    * @param {Record<string, unknown>} meta Additional data to attach to the logger instance.
    */
   public initLogger(meta?: Record<string, unknown>): void {
@@ -97,8 +95,7 @@ export class JobRepository<TParams, TResult>
     }
 
     cancellationToken?.throwIfCancelled();
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-    const info = await this.insert(job as any);
+    const info = await this.insert(job as never);
     job.id = (info.identifiers[0] as { id: number }).id;
 
     this.logger?.info(`Added job ${job.id} with type ${job.type} due ${job.dueDate.toISOString()}.`);
@@ -285,8 +282,7 @@ export class JobRepository<TParams, TResult>
 
     cancellationToken?.throwIfCancelled();
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    job = await this.manager.save(Job, job as any);
+    job = await this.manager.save(Job, job as Job<TParams, TResult>);
 
     this.logger?.info(
       { jobId: job.id, runner: job.runner },
@@ -314,8 +310,7 @@ export class JobRepository<TParams, TResult>
     job.successfulItems = null as unknown as undefined;
     job.failedItems = null as unknown as undefined;
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    job = await this.manager.save(Job, job as any);
+    job = await this.manager.save(Job, job);
 
     this.logger?.info("Resetted job %d on runner %s", job.id, runnerName);
 

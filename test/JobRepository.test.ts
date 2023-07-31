@@ -244,11 +244,13 @@ describe("JobRepository", () => {
       let transaction: <T>(runInTransaction: (entityManager: EntityManager) => Promise<T>) => Promise<T>;
       beforeAll(() => {
         repo = getJobRepo<never, never>(dataSource);
+        // eslint-disable-next-line @typescript-eslint/unbound-method
         transaction = repo.manager.transaction;
       });
 
       afterAll(() => {
         if (repo) {
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore
           repo.manager.transaction = transaction;
         }
