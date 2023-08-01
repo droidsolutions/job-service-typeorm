@@ -1,3 +1,10 @@
+## [2.0.1](https://github.com/droidsolutions/job-service-typeorm/compare/v2.0.0...v2.0.1) (2023-08-01)
+
+
+### Bug Fixes
+
+* **JobRepository:** clean up job start time on finish ([f61a33d](https://github.com/droidsolutions/job-service-typeorm/commit/f61a33d68deb3ed842f2c14031ed0c1b754216ba))
+
 # [2.0.0](https://github.com/droidsolutions/job-service-typeorm/compare/v1.1.0...v2.0.0) (2023-04-05)
 
 
