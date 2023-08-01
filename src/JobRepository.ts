@@ -278,6 +278,7 @@ export class JobRepository<TParams, TResult>
 
       // convert from nanoseconds to milliseconds
       job.processingTimeMs = Number((endTime - startTime) / 1000000n);
+      this.jobTimes.delete(job.id); // Remove start time for this job
     }
 
     cancellationToken?.throwIfCancelled();
@@ -309,6 +310,8 @@ export class JobRepository<TParams, TResult>
     job.totalItems = null as unknown as undefined;
     job.successfulItems = null as unknown as undefined;
     job.failedItems = null as unknown as undefined;
+
+    // don't check cancellationToken here, reset should be possible if the app shuts down
 
     job = await this.manager.save(Job, job);
 
