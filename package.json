@@ -44,7 +44,7 @@
     "typeorm": "^0.3.6"
   },
   "devDependencies": {
-    "@commitlint/cli": "17.7.0",
+    "@commitlint/cli": "17.7.1",
     "@commitlint/config-conventional": "17.7.0",
     "@droidsolutions-oss/job-service": "2.1.2",
     "@semantic-release/changelog": "6.0.3",
