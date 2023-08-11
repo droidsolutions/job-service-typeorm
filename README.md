@@ -10,7 +10,7 @@ This is an implementation of the `IJobRepository` interface from the NodeJS vers
 
 # Installation
 
-This library is an extension to the [DroidSolutions Job Service](https://github.com/droidsolutions/job-service) library and needs it installed as well as the [Cancellation Token library](https://github.com/conradreuter/cancellationtoken). Since it is a repository implementation for [TypeORM](https://typeorm.io) the latter is also needed.
+This library is an extension to the [DroidSolutions Job Service](https://github.com/droidsolutions/job-service) library and needs it installed. Since it is a repository implementation for [TypeORM](https://typeorm.io) the latter is also needed.
 
 To use it install this library along with the dependencies by using
 
@@ -24,7 +24,6 @@ First you must include the Job entity in your [TypeORM](https://typeorm.io) data
 
 ```ts
 import { Job, JobRepository } from "@droidsolutions-oss/job-service-typeorm";
-import CancellationToken from "cancellationtoken";
 import { DataSourceOptions } from "typeorm";
 import { LoggerFactory } from "./loggerfactory";
 
@@ -43,11 +42,11 @@ const workerSettings: IJobWorkerSettings = {
   // ...
 };
 const worker = new JobWorker(workerSettings, jobRepo, loggerFactory);
-const { token, cancel } = CancellationToken.create();
-void worker.executeAsync(token);
+const controller = new AbortController();
+void worker.executeAsync(controller.signal);
 
-// when you want to stop the worker, e.g. when shutting down the app use the cancellation token
-cancel("App is shutting down");
+// when you want to stop the worker, e.g. when shutting down the app use the abortcontroller to cancel the signal
+controller.abort(new Error("App is shutting down"));
 ```
 
 # Details

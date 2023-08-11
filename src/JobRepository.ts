@@ -2,13 +2,11 @@ import {
   EmtpyLogger,
   IJob,
   IJobRepository,
-  isCancellationError,
   JobState,
   LoggerFactory,
   SimpleLogger,
   transformDateToUtc,
 } from "@droidsolutions-oss/job-service";
-import CancellationToken from "cancellationtoken";
 import { add } from "date-fns";
 import { Brackets, DataSource, EntityManager, FindOptionsWhere, QueryRunner, Raw, Repository } from "typeorm";
 import { Job } from "./Entities/Job";
@@ -81,7 +79,7 @@ export class JobRepository<TParams, TResult>
     type: string,
     dueDate?: Date,
     parameters?: TParams,
-    cancellationToken?: CancellationToken,
+    cancellationToken?: AbortSignal,
   ): Promise<IJob<TParams, TResult>> {
     const job: Job<TParams, TResult> = new Job();
     const now = transformDateToUtc();
@@ -94,7 +92,7 @@ export class JobRepository<TParams, TResult>
       job.parameters = parameters;
     }
 
-    cancellationToken?.throwIfCancelled();
+    cancellationToken?.throwIfAborted();
     const info = await this.insert(job as never);
     job.id = (info.identifiers[0] as { id: number }).id;
 
@@ -106,7 +104,7 @@ export class JobRepository<TParams, TResult>
   public async countJobsAsync(
     type: string,
     state?: JobState | undefined,
-    cancellationToken?: CancellationToken | undefined,
+    cancellationToken?: AbortSignal | undefined,
   ): Promise<number> {
     const where: FindOptionsWhere<Job<TParams, TResult>> = {};
     if (type) {
@@ -117,7 +115,7 @@ export class JobRepository<TParams, TResult>
       where.state = state;
     }
 
-    cancellationToken?.throwIfCancelled();
+    cancellationToken?.throwIfAborted();
     return await this.count({ where });
   }
 
@@ -126,7 +124,7 @@ export class JobRepository<TParams, TResult>
     dueDate?: Date,
     parameters?: TParams,
     includeStarted = false,
-    cancellationToken?: CancellationToken,
+    cancellationToken?: AbortSignal,
   ): Promise<IJob<TParams, TResult> | undefined> {
     if (!dueDate && !parameters) {
       throw new Error("Either dueDate or parameters must be given to find a job.");
@@ -153,7 +151,7 @@ export class JobRepository<TParams, TResult>
       query = query.andWhere("j.parameters ::jsonb @> :parameters", { parameters });
     }
 
-    cancellationToken?.throwIfCancelled();
+    cancellationToken?.throwIfAborted();
 
     const job = await query.getOne();
 
@@ -163,7 +161,7 @@ export class JobRepository<TParams, TResult>
   public async getAndStartFirstPendingJobAsync(
     type: string,
     runner: string,
-    cancellationToken?: CancellationToken,
+    cancellationToken?: AbortSignal,
   ): Promise<IJob<TParams, TResult> | undefined> {
     const findOptions: FindOptionsWhere<Job<TParams, TResult>> = {
       state: JobState.Requested,
@@ -176,7 +174,7 @@ export class JobRepository<TParams, TResult>
 
     try {
       const job = await this.manager.transaction<Job<TParams, TResult> | null>(async (manager) => {
-        cancellationToken?.throwIfCancelled();
+        cancellationToken?.throwIfAborted();
         const job = await manager.findOne<Job<TParams, TResult>>(Job, {
           where: findOptions,
           order: { dueDate: "ASC" },
@@ -189,7 +187,7 @@ export class JobRepository<TParams, TResult>
           job.runner = runner;
           job.updatedAt = transformDateToUtc();
 
-          cancellationToken?.throwIfCancelled();
+          cancellationToken?.throwIfAborted();
           const info = await manager.update(
             Job,
             { id: job.id },
@@ -203,7 +201,7 @@ export class JobRepository<TParams, TResult>
 
       return job ?? undefined;
     } catch (err) {
-      if (isCancellationError(err)) {
+      if (cancellationToken?.aborted) {
         this.logger?.warn("Starting a job has been cancelled.");
         throw err;
       }
@@ -216,11 +214,11 @@ export class JobRepository<TParams, TResult>
   public async setTotalItemsAsync(
     job: IJob<TParams, TResult>,
     total: number,
-    cancellationToken?: CancellationToken,
+    cancellationToken?: AbortSignal,
   ): Promise<void> {
     job.totalItems = total;
 
-    cancellationToken?.throwIfCancelled();
+    cancellationToken?.throwIfAborted();
     job = await this.manager.save(Job, job);
   }
 
@@ -228,11 +226,11 @@ export class JobRepository<TParams, TResult>
     job: IJob<TParams, TResult>,
     items = 1,
     failed = false,
-    cancellationToken?: CancellationToken,
+    cancellationToken?: AbortSignal,
   ): Promise<void> {
     try {
       await this.manager.transaction(async (manager) => {
-        cancellationToken?.throwIfCancelled();
+        cancellationToken?.throwIfAborted();
         const data = await manager.findOne(Job, {
           select: ["id", "failedItems", "successfulItems"],
           where: { id: job.id },
@@ -245,16 +243,16 @@ export class JobRepository<TParams, TResult>
         job.updatedAt = transformDateToUtc();
         if (failed === true) {
           job.failedItems = (data.failedItems ?? 0) + items;
-          cancellationToken?.throwIfCancelled();
+          cancellationToken?.throwIfAborted();
           await manager.update(Job, { id: job.id }, { failedItems: job.failedItems, updatedAt: job.updatedAt });
         } else {
           job.successfulItems = (data.successfulItems ?? 0) + items;
-          cancellationToken?.throwIfCancelled();
+          cancellationToken?.throwIfAborted();
           await manager.update(Job, { id: job.id }, { successfulItems: job.successfulItems, updatedAt: job.updatedAt });
         }
       });
     } catch (err) {
-      if (isCancellationError(err)) {
+      if (cancellationToken?.aborted) {
         this.logger?.warn("Adding job progress has been cancelled.");
         throw err;
       }
@@ -268,7 +266,7 @@ export class JobRepository<TParams, TResult>
   public async finishJobAsync(
     job: IJob<TParams, TResult>,
     addNextJobIn?: { days?: number; hours?: number; minutes?: number; seconds?: number },
-    cancellationToken?: CancellationToken,
+    cancellationToken?: AbortSignal,
   ): Promise<void> {
     job.state = JobState.Finished;
     job.updatedAt = transformDateToUtc();
@@ -281,7 +279,7 @@ export class JobRepository<TParams, TResult>
       this.jobTimes.delete(job.id); // Remove start time for this job
     }
 
-    cancellationToken?.throwIfCancelled();
+    cancellationToken?.throwIfAborted();
 
     job = await this.manager.save(Job, job as Job<TParams, TResult>);
 
@@ -298,11 +296,11 @@ export class JobRepository<TParams, TResult>
     }
 
     const nextRun: Date = add(transformDateToUtc(), addNextJobIn);
-    cancellationToken?.throwIfCancelled();
+    cancellationToken?.throwIfAborted();
     await this.addJobAsync(job.type, nextRun, job.parameters);
   }
 
-  public async resetJobAsync(job: Job<TParams, TResult>, _cancellationToken?: CancellationToken): Promise<void> {
+  public async resetJobAsync(job: Job<TParams, TResult>, _cancellationToken?: AbortSignal): Promise<void> {
     const runnerName = job.runner;
     job.state = JobState.Requested;
     job.runner = null as unknown as undefined;
