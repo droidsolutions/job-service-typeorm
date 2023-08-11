@@ -1,3 +1,15 @@
+# [3.0.0](https://github.com/droidsolutions/job-service-typeorm/compare/v2.0.1...v3.0.0) (2023-08-11)
+
+
+### Features
+
+* replace cancellationtoken with AbortSignal ([49a5952](https://github.com/droidsolutions/job-service-typeorm/commit/49a5952fbbd4aadadcd4653fe69e5b4d4cf0e869))
+
+
+### BREAKING CHANGES
+
+* Replace the cancellationtoken in async method with NodeJS internal AbortSignal
+
 ## [2.0.1](https://github.com/droidsolutions/job-service-typeorm/compare/v2.0.0...v2.0.1) (2023-08-01)
 
 
