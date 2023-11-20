@@ -5,11 +5,11 @@ import {
   JobState,
   LoggerFactory,
   SimpleLogger,
-  transformDateToUtc,
 } from "@droidsolutions-oss/job-service";
 import { add } from "date-fns";
 import { Brackets, DataSource, EntityManager, FindOptionsWhere, QueryRunner, Raw, Repository } from "typeorm";
 import { Job } from "./Entities/Job";
+import { getDateInUtc } from "./UtcHelper";
 
 export const getJobRepo = <TParams, TResult>(
   dataSource: DataSource,
@@ -80,7 +80,7 @@ export class JobRepository<TParams, TResult>
     cancellationToken?: AbortSignal,
   ): Promise<IJob<TParams, TResult>> {
     const job: Job<TParams, TResult> = new Job();
-    const now = transformDateToUtc();
+    const now = getDateInUtc();
     job.createdAt = now;
     job.dueDate = dueDate ?? now;
     job.state = JobState.Requested;
@@ -163,7 +163,7 @@ export class JobRepository<TParams, TResult>
   ): Promise<IJob<TParams, TResult> | undefined> {
     const findOptions: FindOptionsWhere<Job<TParams, TResult>> = {
       state: JobState.Requested,
-      dueDate: Raw((alias) => `${alias} < now()`),
+      dueDate: Raw((alias) => `${alias} <= now()`),
     };
 
     if (type) {
@@ -183,7 +183,7 @@ export class JobRepository<TParams, TResult>
           this.jobTimes.set(job.id, process.hrtime.bigint());
           job.state = JobState.Started;
           job.runner = runner;
-          job.updatedAt = transformDateToUtc();
+          job.updatedAt = getDateInUtc();
 
           cancellationToken?.throwIfAborted();
           const info = await manager.update(
@@ -238,7 +238,7 @@ export class JobRepository<TParams, TResult>
           throw new Error(`Unable to update progress because no job with id ${job.id} exists.`);
         }
 
-        job.updatedAt = transformDateToUtc();
+        job.updatedAt = getDateInUtc();
         if (failed === true) {
           job.failedItems = (data.failedItems ?? 0) + items;
           cancellationToken?.throwIfAborted();
@@ -267,7 +267,7 @@ export class JobRepository<TParams, TResult>
     cancellationToken?: AbortSignal,
   ): Promise<void> {
     job.state = JobState.Finished;
-    job.updatedAt = transformDateToUtc();
+    job.updatedAt = getDateInUtc();
     const startTime = this.jobTimes.get(job.id);
     if (startTime) {
       const endTime = process.hrtime.bigint();
@@ -293,7 +293,7 @@ export class JobRepository<TParams, TResult>
       return;
     }
 
-    const nextRun: Date = add(transformDateToUtc(), addNextJobIn);
+    const nextRun: Date = add(getDateInUtc(), addNextJobIn);
     cancellationToken?.throwIfAborted();
     await this.addJobAsync(job.type, nextRun, job.parameters);
   }

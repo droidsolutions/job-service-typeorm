@@ -1,9 +1,10 @@
-import { JobState, transformDateToUtc } from "@droidsolutions-oss/job-service";
+import { JobState } from "@droidsolutions-oss/job-service";
 import { addDays, addMinutes, addSeconds } from "date-fns";
 import { DataSource, DataSourceOptions, EntityManager } from "typeorm";
 import { Job } from "../src/Entities/Job";
 import { getJobRepo, JobRepository } from "../src/JobRepository";
 import { TestEnumParameter, TestParameter, TestResult } from "./Fixture/TestParameter";
+import { getDateInUtc } from "../src/UtcHelper";
 
 describe("JobRepository", () => {
   let dataSource: DataSource;
@@ -44,9 +45,9 @@ describe("JobRepository", () => {
       let afterCreation: number;
 
       beforeAll(async () => {
-        beforeCreation = transformDateToUtc().getTime();
+        beforeCreation = getDateInUtc().getTime();
         job = await repo.addJobAsync(type, dueDate);
-        afterCreation = transformDateToUtc().getTime();
+        afterCreation = getDateInUtc().getTime();
       });
 
       it("should add a job", () => expect(job).toBeDefined());
@@ -72,9 +73,9 @@ describe("JobRepository", () => {
 
       beforeAll(async () => {
         // Handle UTC cnversionn by just using the same method
-        beforeCreation = transformDateToUtc().getTime();
+        beforeCreation = getDateInUtc().getTime();
         job = await repo.addJobAsync(type);
-        afterCreation = transformDateToUtc().getTime();
+        afterCreation = getDateInUtc().getTime();
       });
 
       it("should add a job", () => expect(job).toBeDefined());
@@ -220,9 +221,9 @@ describe("JobRepository", () => {
         olderJob = await repo.addJobAsync(type, addMinutes(dueDate, 10), parameters);
 
         // Handle UTC cnversionn by just using the same method
-        beforeStart = transformDateToUtc().getTime();
+        beforeStart = getDateInUtc().getTime();
         foundJob = await repo.getAndStartFirstPendingJobAsync(type, runner);
-        afterStart = transformDateToUtc().getTime();
+        afterStart = getDateInUtc().getTime();
       });
 
       it("should find oldest job", () => expect(foundJob?.id).toBe(olderJob.id));
@@ -333,9 +334,9 @@ describe("JobRepository", () => {
     });
 
     it("should add updated", async () => {
-      const beforeProgress = transformDateToUtc().getTime();
+      const beforeProgress = getDateInUtc().getTime();
       await repo.addProgressAsync(existingJob, 5, false);
-      const afterProgress = transformDateToUtc().getTime();
+      const afterProgress = getDateInUtc().getTime();
 
       const job = await repo.findOne({ where: { id: existingJob.id } });
       expect(job?.successfulItems).toBe(5);
@@ -357,10 +358,10 @@ describe("JobRepository", () => {
       beforeAll(async () => {
         job = await repo.addJobAsync("finished-job-without-new", undefined, parameters);
 
-        beforeFinish = transformDateToUtc().getTime();
+        beforeFinish = getDateInUtc().getTime();
         job.result = result;
         await repo.finishJobAsync(job);
-        afterFinish = transformDateToUtc().getTime();
+        afterFinish = getDateInUtc().getTime();
 
         loadedJob = await repo.findOne({ where: { id: job.id } });
       });
@@ -392,7 +393,7 @@ describe("JobRepository", () => {
       });
 
       it("should add a day to next job", async () => {
-        beforeFinish = transformDateToUtc().getTime();
+        beforeFinish = getDateInUtc().getTime();
         await repo.finishJobAsync(existingJob, { days: 1 });
 
         const newJob = await repo.findOne({ where: { type, state: JobState.Requested } });
