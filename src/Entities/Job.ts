@@ -10,7 +10,7 @@ export class Job<TParams, TResult> implements IJob<TParams, TResult> {
   @PrimaryGeneratedColumn({ type: "bigint" })
   public id: number;
 
-  /** The dtae when the job was created. */
+  /** The date when the job was created. */
   @Column()
   // @CreateDateColumn()
   public createdAt: Date;
