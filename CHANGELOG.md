@@ -1,3 +1,10 @@
+## [3.0.1](https://github.com/droidsolutions/job-service-typeorm/compare/v3.0.0...v3.0.1) (2023-11-20)
+
+
+### Bug Fixes
+
+* **JobRepo:** create copy of logger meta ([d8876a0](https://github.com/droidsolutions/job-service-typeorm/commit/d8876a0e71de281842541fc9d09707bd37a3efe1))
+
 # [3.0.0](https://github.com/droidsolutions/job-service-typeorm/compare/v2.0.1...v3.0.0) (2023-08-11)
 
 
