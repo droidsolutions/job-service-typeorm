@@ -64,13 +64,11 @@ export class JobRepository<TParams, TResult>
    * @param {Record<string, unknown>} meta Additional data to attach to the logger instance.
    */
   public initLogger(meta?: Record<string, unknown>): void {
-    if (!meta) {
-      meta = {};
-    }
+    const usedMeta = Object.assign({}, meta);
 
-    meta.module = "@droidsolutions-oss/job-service-typeorm";
+    usedMeta.module = "@droidsolutions-oss/job-service-typeorm";
 
-    this.logger = this.loggerFactory(this.constructor, meta);
+    this.logger = this.loggerFactory(this.constructor, usedMeta);
 
     this.logger.trace("initiated new repo logger");
   }
