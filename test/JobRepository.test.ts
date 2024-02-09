@@ -1,5 +1,5 @@
 import { JobState } from "@droidsolutions-oss/job-service";
-import { addDays, addMinutes, addSeconds } from "date-fns";
+import { addDays, addMinutes, addSeconds, sub } from "date-fns";
 import { DataSource, DataSourceOptions, EntityManager } from "typeorm";
 import { Job } from "../src/Entities/Job";
 import { getJobRepo, JobRepository } from "../src/JobRepository";
@@ -474,6 +474,77 @@ describe("JobRepository", () => {
 
       const count = await repo.countJobsAsync("count-all", JobState.Started);
       expect(count).toBe(1);
+    });
+  });
+
+  describe("deleteJobsAsync", () => {
+    const type = "delete-me";
+    const refDate = new Date(2024, 1, 9, 10, 30, 0);
+
+    beforeEach(async () => {
+      const finishedOldJob = new Job<TestParameter, TestResult>();
+      finishedOldJob.createdAt = new Date();
+      finishedOldJob.dueDate = new Date();
+      finishedOldJob.state = JobState.Finished;
+      finishedOldJob.type = type;
+      finishedOldJob.updatedAt = sub(refDate, { days: 1 });
+      await repo.insert(finishedOldJob);
+
+      const oldJobWithAnotherType = new Job<TestParameter, TestResult>();
+      oldJobWithAnotherType.createdAt = new Date();
+      oldJobWithAnotherType.dueDate = new Date();
+      oldJobWithAnotherType.state = JobState.Finished;
+      oldJobWithAnotherType.type = "dont-delete-me";
+      oldJobWithAnotherType.updatedAt = sub(refDate, { days: 1 });
+      await repo.insert(oldJobWithAnotherType);
+
+      const unfinishedJob = new Job<TestParameter, TestResult>();
+      unfinishedJob.createdAt = new Date();
+      unfinishedJob.dueDate = new Date();
+      unfinishedJob.state = JobState.Started;
+      unfinishedJob.type = type;
+      unfinishedJob.updatedAt = sub(refDate, { days: 1 });
+      await repo.insert(unfinishedJob);
+
+      const finishedNotOldJob = new Job<TestParameter, TestResult>();
+      finishedNotOldJob.createdAt = new Date();
+      finishedNotOldJob.dueDate = new Date();
+      finishedNotOldJob.state = JobState.Started;
+      finishedNotOldJob.type = type;
+      finishedNotOldJob.updatedAt = addDays(refDate, 1);
+      await repo.insert(finishedNotOldJob);
+    });
+
+    afterEach(async () => {
+      await repo.clear();
+    });
+
+    it("should throw an error if no filter is given", async () => {
+      await expect(repo.deleteJobsAsync("")).rejects.toThrow("At least one filter must be given to delete jobs.");
+    });
+
+    it("should only remove jobs with updatedAt older than given date", async () => {
+      const deleted = await repo.deleteJobsAsync(type, undefined, refDate);
+      expect(deleted).toBe(2);
+
+      const count = await repo.countJobsAsync(type);
+      expect(count).toBe(1);
+    });
+
+    it("should not remove jobs with different types", async () => {
+      const deleted = await repo.deleteJobsAsync(type, undefined, refDate);
+      expect(deleted).toBe(2);
+
+      const count = await repo.countJobsAsync("dont-delete-me");
+      expect(count).toBe(1);
+    });
+
+    it("should only remove jobs with given state", async () => {
+      const deleted = await repo.deleteJobsAsync(type, JobState.Finished, refDate);
+      expect(deleted).toBe(1);
+
+      const count = await repo.countJobsAsync(type);
+      expect(count).toBe(2);
     });
   });
 });

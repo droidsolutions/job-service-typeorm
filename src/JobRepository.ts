@@ -117,6 +117,40 @@ export class JobRepository<TParams, TResult>
     return await this.count({ where });
   }
 
+  public async deleteJobsAsync(
+    type: string,
+    state?: JobState,
+    lastUpdatedBefore?: Date | undefined,
+    cancellationToken?: AbortSignal,
+  ): Promise<number> {
+    const where: FindOptionsWhere<Job<TParams, TResult>> = {};
+    let hasFilter = false;
+
+    if (type) {
+      where.type = type;
+      hasFilter = true;
+    }
+
+    if (state) {
+      where.state = state;
+      hasFilter = true;
+    }
+
+    if (lastUpdatedBefore) {
+      where.updatedAt = Raw((alias) => `${alias} < :lastUpdatedBefore`, { lastUpdatedBefore });
+      hasFilter = true;
+    }
+
+    if (!hasFilter) {
+      throw new Error("At least one filter must be given to delete jobs.");
+    }
+
+    cancellationToken?.throwIfAborted();
+    const result = await this.delete(where);
+
+    return result.affected ?? 0;
+  }
+
   public async findExistingJobAsync(
     type: string,
     dueDate?: Date,
