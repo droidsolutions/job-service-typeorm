@@ -225,7 +225,11 @@ export class JobRepository<TParams, TResult>
             { id: job.id },
             { state: JobState.Started, runner, updatedAt: job.updatedAt },
           );
-          this.logger?.info(`Starting job ${job.id} with type ${job.type} on runner ${job.runner}.`, info.affected);
+          this.logger?.info(
+            { jobId: job.id },
+            `Starting job ${job.id} with type ${job.type} on runner ${job.runner}.`,
+            info.affected,
+          );
         }
 
         return job;
