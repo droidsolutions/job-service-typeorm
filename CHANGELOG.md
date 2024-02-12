@@ -1,3 +1,10 @@
+## [3.1.1](https://github.com/droidsolutions/job-service-typeorm/compare/v3.1.0...v3.1.1) (2024-02-12)
+
+
+### Bug Fixes
+
+* **JobRepository:** add jobId to starting job log ([72f8b24](https://github.com/droidsolutions/job-service-typeorm/commit/72f8b24b4f1b4239815a673edef01f55e7c5f70e))
+
 # [3.1.0](https://github.com/droidsolutions/job-service-typeorm/compare/v3.0.1...v3.1.0) (2024-02-12)
 
 
