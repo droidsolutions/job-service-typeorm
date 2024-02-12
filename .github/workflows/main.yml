@@ -66,6 +66,8 @@ jobs:
           node-version: 20
       - name: Install packages
         run: npm ci
+        env:
+          HUSKY: 0
       - name: Download lib from build job
         uses: actions/download-artifact@v4
         with:
@@ -74,5 +76,6 @@ jobs:
       - name: Semantic Release
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          HUSKY: 0
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: npx semantic-release
