@@ -1,3 +1,11 @@
+# [3.1.0](https://github.com/droidsolutions/job-service-typeorm/compare/v3.0.1...v3.1.0) (2024-02-12)
+
+
+### Features
+
+* add deleteJobsAsync method ([990fc0e](https://github.com/droidsolutions/job-service-typeorm/commit/990fc0e5f4a94b4ff8d1740c3416bd5cf8084b66))
+* update date-fns to 3x ([559e74d](https://github.com/droidsolutions/job-service-typeorm/commit/559e74d305bcea8e159125ba04246a5f07f8f915))
+
 ## [3.0.1](https://github.com/droidsolutions/job-service-typeorm/compare/v3.0.0...v3.0.1) (2023-11-20)
 
 
