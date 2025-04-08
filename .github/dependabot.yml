@@ -2,7 +2,7 @@
 version: 2
 updates:
   - assignees:
-      - "kampfmoehre"
+      - "Kampfmoehre"
     directory: /
     open-pull-requests-limit: 10
     package-ecosystem: nuget
@@ -10,7 +10,7 @@ updates:
     schedule:
       interval: daily
   - assignees:
-      - "kampfmoehre"
+      - "Kampfmoehre"
     commit-message:
       prefix: "ci"
     directory: /
@@ -32,7 +32,7 @@ updates:
     schedule:
       interval: daily
   - assignees:
-      - "kampfmoehre"
+      - "Kampfmoehre"
     commit-message:
       prefix: "ci"
     directory: /
