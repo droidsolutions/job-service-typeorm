@@ -63,7 +63,7 @@
     "husky": "9.1.7",
     "jest": "29.7.0",
     "pg": "8.16.0",
-    "semantic-release": "24.2.3",
+    "semantic-release": "24.2.4",
     "ts-jest": "29.3.4",
     "typeorm": "0.3.24",
     "typescript": "5.8.3"
