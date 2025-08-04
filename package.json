@@ -64,7 +64,7 @@
     "jest": "30.0.5",
     "pg": "8.16.3",
     "semantic-release": "24.2.7",
-    "ts-jest": "29.4.0",
+    "ts-jest": "29.4.1",
     "typeorm": "0.3.25",
     "typescript": "5.9.2"
   },
