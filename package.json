@@ -65,7 +65,7 @@
     "pg": "8.16.3",
     "semantic-release": "25.0.2",
     "ts-jest": "29.4.6",
-    "typeorm": "0.3.27",
+    "typeorm": "0.3.28",
     "typescript": "5.9.3"
   },
   "commitlint": {
