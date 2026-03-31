@@ -10,7 +10,7 @@ jobs:
       - uses: actions/setup-node@v6
         with:
           node-version: 24
-      - run: npm ci
+      - run: npm ci --ignore-scripts
       - run: npx tsc
       - name: Upload artifacts
         uses: actions/upload-artifact@v7
@@ -39,7 +39,7 @@ jobs:
           - 5432:5432
     steps:
       - uses: actions/checkout@v6
-      - run: npm ci
+      - run: npm ci --ignore-scripts
       - run: npx jest --coverage
         env:
           POSTGRES_HOST: localhost
@@ -72,7 +72,7 @@ jobs:
         with:
           node-version: 24
       - name: Install packages
-        run: npm ci
+        run: npm ci --ignore-scripts
         env:
           HUSKY: 0
       - name: Verify the integrity of provenance attestations and registry signatures for installed dependencies
