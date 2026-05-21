@@ -4,7 +4,6 @@ import { DataSource, DataSourceOptions, EntityManager } from "typeorm";
 import { Job } from "../src/Entities/Job";
 import { getJobRepo, JobRepository } from "../src/JobRepository";
 import { TestEnumParameter, TestParameter, TestResult } from "./Fixture/TestParameter";
-import { getDateInUtc } from "../src/UtcHelper";
 
 describe("JobRepository", () => {
   let dataSource: DataSource;
@@ -45,9 +44,9 @@ describe("JobRepository", () => {
       let afterCreation: number;
 
       beforeAll(async () => {
-        beforeCreation = getDateInUtc().getTime();
+        beforeCreation = new Date().getTime();
         job = await repo.addJobAsync(type, dueDate);
-        afterCreation = getDateInUtc().getTime();
+        afterCreation = new Date().getTime();
       });
 
       it("should add a job", () => expect(job).toBeDefined());
@@ -72,10 +71,9 @@ describe("JobRepository", () => {
       let afterCreation: number;
 
       beforeAll(async () => {
-        // Handle UTC cnversionn by just using the same method
-        beforeCreation = getDateInUtc().getTime();
+        beforeCreation = new Date().getTime();
         job = await repo.addJobAsync(type);
-        afterCreation = getDateInUtc().getTime();
+        afterCreation = new Date().getTime();
       });
 
       it("should add a job", () => expect(job).toBeDefined());
@@ -220,10 +218,9 @@ describe("JobRepository", () => {
         await repo.addJobAsync(type, addMinutes(dueDate, 20));
         olderJob = await repo.addJobAsync(type, addMinutes(dueDate, 10), parameters);
 
-        // Handle UTC cnversionn by just using the same method
-        beforeStart = getDateInUtc().getTime();
+beforeStart = new Date().getTime();
         foundJob = await repo.getAndStartFirstPendingJobAsync(type, runner);
-        afterStart = getDateInUtc().getTime();
+        afterStart = new Date().getTime();
       });
 
       it("should find oldest job", () => expect(foundJob?.id).toBe(olderJob.id));
@@ -334,9 +331,9 @@ describe("JobRepository", () => {
     });
 
     it("should add updated", async () => {
-      const beforeProgress = getDateInUtc().getTime();
+      const beforeProgress = new Date().getTime();
       await repo.addProgressAsync(existingJob, 5, false);
-      const afterProgress = getDateInUtc().getTime();
+      const afterProgress = new Date().getTime();
 
       const job = await repo.findOne({ where: { id: existingJob.id } });
       expect(job?.successfulItems).toBe(5);
@@ -358,10 +355,10 @@ describe("JobRepository", () => {
       beforeAll(async () => {
         job = await repo.addJobAsync("finished-job-without-new", undefined, parameters);
 
-        beforeFinish = getDateInUtc().getTime();
+        beforeFinish = new Date().getTime();
         job.result = result;
         await repo.finishJobAsync(job);
-        afterFinish = getDateInUtc().getTime();
+        afterFinish = new Date().getTime();
 
         loadedJob = await repo.findOne({ where: { id: job.id } });
       });
@@ -393,7 +390,7 @@ describe("JobRepository", () => {
       });
 
       it("should add a day to next job", async () => {
-        beforeFinish = getDateInUtc().getTime();
+        beforeFinish = new Date().getTime();
         await repo.finishJobAsync(existingJob, { days: 1 });
 
         const newJob = await repo.findOne({ where: { type, state: JobState.Requested } });

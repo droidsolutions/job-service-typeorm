@@ -9,7 +9,6 @@ import {
 import { add } from "date-fns";
 import { Brackets, DataSource, EntityManager, FindOptionsWhere, QueryRunner, Raw, Repository } from "typeorm";
 import { Job } from "./Entities/Job";
-import { getDateInUtc } from "./UtcHelper";
 
 export const getJobRepo = <TParams, TResult>(
   dataSource: DataSource,
@@ -80,7 +79,7 @@ export class JobRepository<TParams, TResult>
     cancellationToken?: AbortSignal,
   ): Promise<IJob<TParams, TResult>> {
     const job: Job<TParams, TResult> = new Job();
-    const now = getDateInUtc();
+    const now = new Date();
     job.createdAt = now;
     job.dueDate = dueDate ?? now;
     job.state = JobState.Requested;
@@ -217,7 +216,7 @@ export class JobRepository<TParams, TResult>
           this.jobTimes.set(job.id, process.hrtime.bigint());
           job.state = JobState.Started;
           job.runner = runner;
-          job.updatedAt = getDateInUtc();
+          job.updatedAt = new Date();
 
           cancellationToken?.throwIfAborted();
           const info = await manager.update(
@@ -276,7 +275,7 @@ export class JobRepository<TParams, TResult>
           throw new Error(`Unable to update progress because no job with id ${job.id} exists.`);
         }
 
-        job.updatedAt = getDateInUtc();
+        job.updatedAt = new Date();
         if (failed === true) {
           job.failedItems = (data.failedItems ?? 0) + items;
           cancellationToken?.throwIfAborted();
@@ -305,7 +304,7 @@ export class JobRepository<TParams, TResult>
     cancellationToken?: AbortSignal,
   ): Promise<void> {
     job.state = JobState.Finished;
-    job.updatedAt = getDateInUtc();
+    job.updatedAt = new Date();
     const startTime = this.jobTimes.get(job.id);
     if (startTime) {
       const endTime = process.hrtime.bigint();
@@ -331,7 +330,7 @@ export class JobRepository<TParams, TResult>
       return;
     }
 
-    const nextRun: Date = add(getDateInUtc(), addNextJobIn);
+    const nextRun: Date = add(new Date(), addNextJobIn);
     cancellationToken?.throwIfAborted();
     await this.addJobAsync(job.type, nextRun, job.parameters);
   }
