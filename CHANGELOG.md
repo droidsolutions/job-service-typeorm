@@ -1,3 +1,23 @@
+# [4.0.0](https://github.com/droidsolutions/job-service-typeorm/compare/v3.1.1...v4.0.0) (2026-05-21)
+
+
+### Features
+
+* adapt to TypeORM 1.0.0 and job-service 4.0.0 ([50f268a](https://github.com/droidsolutions/job-service-typeorm/commit/50f268a9093cf90f8763937ba3897a6ff5017b76))
+* update date columns to timestamptz ([eec33a3](https://github.com/droidsolutions/job-service-typeorm/commit/eec33a337484e2722c517ce0bdda6cbecefbb528))
+
+
+### BREAKING CHANGES
+
+* createdAt, updatedAt and dueDate are now timetstamptz
+a migration is required
+* remove internal getDateInUtc method and date handling
+
+Signed-off-by: Stefan Ißmer <stefan.issmer@droidsolutions.de>
+* Minimum supported TypeORM version is now 1.0.0
+
+Signed-off-by: Stefan Ißmer <stefan.issmer@droidsolutions.de>
+
 ## [3.1.1](https://github.com/droidsolutions/job-service-typeorm/compare/v3.1.0...v3.1.1) (2024-02-12)
 
 
