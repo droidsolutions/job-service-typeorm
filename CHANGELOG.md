@@ -13,10 +13,8 @@
 a migration is required
 * remove internal getDateInUtc method and date handling
 
-Signed-off-by: Stefan Ißmer <stefan.issmer@droidsolutions.de>
 * Minimum supported TypeORM version is now 1.0.0
 
-Signed-off-by: Stefan Ißmer <stefan.issmer@droidsolutions.de>
 
 ## [3.1.1](https://github.com/droidsolutions/job-service-typeorm/compare/v3.1.0...v3.1.1) (2024-02-12)
 
