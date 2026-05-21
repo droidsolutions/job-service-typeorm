@@ -16,7 +16,7 @@ To use it install this library along with the dependencies by using
 
 `npm i @droidsolutions-oss/job-service @droidsolutions-oss/job-service-typeorm cancellationtoken typeorm`
 
-**Note:** This library only supports [TypeORM](https://typeorm.io) >= 0.36.0.
+**Note:** This library requires [TypeORM](https://typeorm.io) >= 1.0.0.
 
 # Usage
 
@@ -90,7 +90,19 @@ If you don't need any logging from the repository you can omit the `loggerFactor
 
 ## Date
 
-The job repository uses the helper method from the main job-service repository to get the current date in UTC. This is used across the repo when for example jobs are created or the `updatedAt` field is set. This ensures the dates in the database are in UTC even if our application runs in a different timezone.
+All date columns (`createdAt`, `updatedAt`, `dueDate`) use `timestamptz` (`timestamp with time zone`) in PostgreSQL. This means PostgreSQL always stores dates as UTC and handles timezone conversion correctly, regardless of the timezone the application server runs in. No application-level timezone adjustment is needed.
+
+### Migration required
+
+If you are upgrading from a version prior to 4.0.0, a database migration is required to change the existing `timestamp without time zone` columns to `timestamptz`. The migration must be applied before deploying the new version. An example migration using the TypeORM query runner:
+
+```ts
+await queryRunner.query(`ALTER TABLE "job" ALTER COLUMN "created_at" TYPE timestamptz`);
+await queryRunner.query(`ALTER TABLE "job" ALTER COLUMN "updated_at" TYPE timestamptz`);
+await queryRunner.query(`ALTER TABLE "job" ALTER COLUMN "due_date" TYPE timestamptz`);
+```
+
+> **Note:** PostgreSQL stores `timestamp without time zone` values as literal date/time strings with no offset. When converting to `timestamptz`, PostgreSQL interprets existing values using the database server's timezone setting (`TimeZone` parameter). If your database server runs in UTC (the default), no data adjustment occurs. If it runs in a different timezone, existing stored values will be reinterpreted accordingly — verify your database server timezone before migrating.
 
 ## Custom repository
 

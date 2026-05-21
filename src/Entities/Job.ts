@@ -11,17 +11,15 @@ export class Job<TParams, TResult> implements IJob<TParams, TResult> {
   public id: number;
 
   /** The date when the job was created. */
-  @Column()
-  // @CreateDateColumn()
+  @Column({ type: "timestamptz" })
   public createdAt: Date;
 
   /** The date when the job was updated the last time. */
-  @Column({ nullable: true })
-  // @UpdateDateColumn()
+  @Column({ type: "timestamptz", nullable: true })
   public updatedAt?: Date;
 
   /** The earliest date when the job should be executed. */
-  @Column()
+  @Column({ type: "timestamptz" })
   public dueDate: Date;
 
   /** The current state of the job. */
