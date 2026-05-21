@@ -268,7 +268,7 @@ export class JobRepository<TParams, TResult>
       await this.manager.transaction(async (manager) => {
         cancellationToken?.throwIfAborted();
         const data = await manager.findOne(Job, {
-          select: ["id", "failedItems", "successfulItems"],
+          select: { id: true, failedItems: true, successfulItems: true },
           where: { id: job.id },
           lock: { mode: "pessimistic_write" },
         });
