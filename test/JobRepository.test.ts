@@ -218,7 +218,7 @@ describe("JobRepository", () => {
         await repo.addJobAsync(type, addMinutes(dueDate, 20));
         olderJob = await repo.addJobAsync(type, addMinutes(dueDate, 10), parameters);
 
-beforeStart = new Date().getTime();
+        beforeStart = new Date().getTime();
         foundJob = await repo.getAndStartFirstPendingJobAsync(type, runner);
         afterStart = new Date().getTime();
       });
