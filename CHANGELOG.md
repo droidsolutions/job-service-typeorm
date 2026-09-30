@@ -1,3 +1,10 @@
+## [4.0.1](https://github.com/droidsolutions/job-service-typeorm/compare/v4.0.0...v4.0.1) (2026-09-30)
+
+
+### Bug Fixes
+
+* require Node.js versions supported by typeorm 1 ([d9ae5d2](https://github.com/droidsolutions/job-service-typeorm/commit/d9ae5d248c8c697537246b7de0f42f9babea60f6))
+
 # [4.0.0](https://github.com/droidsolutions/job-service-typeorm/compare/v3.1.1...v4.0.0) (2026-05-21)
 
 
