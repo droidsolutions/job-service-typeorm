@@ -41,7 +41,7 @@ export class JobRepository<TParams, TResult>
   private loggerFactory: LoggerFactory;
 
   /**
-   * Initializes a new instance of the @see JobRepository class.
+   * Initializes a new instance of the {@link JobRepository} class.
    * @param {EntityManager} manager The entity manager to use for the underlying repository.
    * @param {QueryRunner} queryRunner The query runner for the underlying repository.
    * @param {LoggerFactory} loggerFactory The logger factory to create a logger for the repo.
@@ -98,11 +98,7 @@ export class JobRepository<TParams, TResult>
     return job;
   }
 
-  public async countJobsAsync(
-    type: string,
-    state?: JobState | undefined,
-    cancellationToken?: AbortSignal | undefined,
-  ): Promise<number> {
+  public async countJobsAsync(type: string, state?: JobState, cancellationToken?: AbortSignal): Promise<number> {
     const where: FindOptionsWhere<Job<TParams, TResult>> = {};
     if (type) {
       where.type = type;
@@ -119,7 +115,7 @@ export class JobRepository<TParams, TResult>
   public async deleteJobsAsync(
     type: string,
     state?: JobState,
-    lastUpdatedBefore?: Date | undefined,
+    lastUpdatedBefore?: Date,
     cancellationToken?: AbortSignal,
   ): Promise<number> {
     const where: FindOptionsWhere<Job<TParams, TResult>> = {};
@@ -254,7 +250,7 @@ export class JobRepository<TParams, TResult>
     job.totalItems = total;
 
     cancellationToken?.throwIfAborted();
-    job = await this.manager.save(Job, job);
+    await this.manager.save(Job, job);
   }
 
   public async addProgressAsync(
@@ -316,7 +312,7 @@ export class JobRepository<TParams, TResult>
 
     cancellationToken?.throwIfAborted();
 
-    job = await this.manager.save(Job, job as Job<TParams, TResult>);
+    job = await this.manager.save(Job, job);
 
     this.logger?.info(
       { jobId: job.id, runner: job.runner },
