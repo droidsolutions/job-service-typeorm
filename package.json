@@ -33,7 +33,7 @@
     "access": "public"
   },
   "engines": {
-    "node": ">=14.0.0"
+    "node": "^20.19.0 || ^22.13.0 || >=24.11.0"
   },
   "dependencies": {
     "date-fns": "^4.1.0"
