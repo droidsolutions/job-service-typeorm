@@ -68,7 +68,7 @@
     "ts-jest": "29.4.14",
     "typeorm": "1.1.1",
     "typescript": "5.9.3",
-    "typescript-eslint": "8.71.0"
+    "typescript-eslint": "8.71.1"
   },
   "commitlint": {
     "extends": [
