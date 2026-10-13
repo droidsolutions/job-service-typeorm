@@ -66,7 +66,7 @@
     "prettier": "3.9.9",
     "semantic-release": "25.0.9",
     "ts-jest": "29.4.14",
-    "typeorm": "1.1.1",
+    "typeorm": "1.1.2",
     "typescript": "5.9.3",
     "typescript-eslint": "8.71.1"
   },
