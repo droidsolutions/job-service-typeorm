@@ -63,7 +63,7 @@
     "husky": "9.1.7",
     "jest": "30.5.2",
     "pg": "8.23.1",
-    "prettier": "3.9.9",
+    "prettier": "3.9.10",
     "semantic-release": "25.0.9",
     "ts-jest": "29.4.14",
     "typeorm": "1.1.2",
